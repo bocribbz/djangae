@@ -21,13 +21,13 @@ class ApiSecurityException(Exception):
 
 
 def find_argument_index(function, argument):
-    args = function.func_code.co_varnames[:function.func_code.co_argcount]
+    args = function.__code__.co_varnames[:function.__code__.co_argcount]
     return args.index(argument)
 
 
 def get_default_argument(function, argument):
     argument_index = find_argument_index(function, argument)
-    num_positional_args = (function.func_code.co_argcount - len(function.func_defaults))
+    num_positional_args = (function.__code__.co_argcount - len(function.func_defaults))
     default_position = argument_index - num_positional_args
     if default_position < 0:
         return None
@@ -37,7 +37,7 @@ def get_default_argument(function, argument):
 def replace_default_argument(function, argument, replacement):
     argument_index = find_argument_index(function, argument)
     num_positional_args = (
-        function.func_code.co_argcount -
+        function.__code__.co_argcount -
         len(function.func_defaults)
     )
     default_position = argument_index - num_positional_args
